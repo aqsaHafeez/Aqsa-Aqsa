@@ -1,80 +1,115 @@
 {% comment %}
-Custom Banner Section (built from scratch)
-- Editable texts (eyebrow/topbar, headline, subheading, CTA buttons, bottom note)
-- Optional background image/illustration
-- Button hover animation
+  Custom Banner Section (built from scratch)
+  - Editable texts (eyebrow/topbar, headline, subheading, CTA buttons, bottom note)
+  - Optional background image/illustration
+  - Button hover animation
 {% endcomment %}
 
-
 <section id="gift-guide-banner-{{ section.id }}" class="gift-guide-banner">
-<div class="ggb__topbar">
-{% if section.settings.topbar_text != '' %}
-<div class="ggb__topbar-inner">
-<span class="ggb__topbar-text">{{ section.settings.topbar_text }}</span>
-{% if section.settings.topbar_link_url != blank and section.settings.topbar_link_label != '' %}
-<a class="ggb__topbar-link" href="{{ section.settings.topbar_link_url }}">{{ section.settings.topbar_link_label }}</a>
-{% endif %}
-</div>
-{% endif %}
-</div>
+  <div class="ggb__topbar">
+    {% if section.settings.topbar_text != '' %}
+      <div class="ggb__topbar-inner">
+        <span class="ggb__topbar-text">{{ section.settings.topbar_text }}</span>
+        {% if section.settings.topbar_link_url != blank and section.settings.topbar_link_label != '' %}
+          <a class="ggb__topbar-link" href="{{ section.settings.topbar_link_url }}">{{ section.settings.topbar_link_label }}</a>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
 
+  <div class="ggb__hero">
+    {% if section.settings.bg_image != blank %}
+      {{ section.settings.bg_image | image_url: width: 2000 | image_tag: loading: 'eager', class: 'ggb__bg' }}
+    {% endif %}
 
-<div class="ggb__hero">
-{% if section.settings.bg_image != blank %}
-{{ section.settings.bg_image | image_url: width: 2000 | image_tag: loading: 'eager', class: 'ggb__bg' }}
-{% endif %}
+    <div class="ggb__content container">
+      {% if section.settings.kicker != '' %}
+        <p class="ggb__kicker">{{ section.settings.kicker }}</p>
+      {% endif %}
+      {% if section.settings.title != '' %}
+        <h1 class="ggb__title">{{ section.settings.title }}</h1>
+      {% endif %}
+      {% if section.settings.subtitle != '' %}
+        <p class="ggb__subtitle">{{ section.settings.subtitle }}</p>
+      {% endif %}
 
+      <div class="ggb__ctas">
+        {% if section.settings.primary_label != '' and section.settings.primary_url != blank %}
+          <a href="{{ section.settings.primary_url }}" class="ggb__btn ggb__btn--primary">
+            <span>{{ section.settings.primary_label }}</span>
+            <svg class="ggb__btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        {% endif %}
+        {% if section.settings.secondary_label != '' and section.settings.secondary_url != blank %}
+          <a href="{{ section.settings.secondary_url }}" class="ggb__btn ggb__btn--ghost">
+            <span>{{ section.settings.secondary_label }}</span>
+          </a>
+        {% endif %}
+      </div>
 
-<div class="ggb__content container">
-{% if section.settings.kicker != '' %}
-<p class="ggb__kicker">{{ section.settings.kicker }}</p>
-{% endif %}
-{% if section.settings.title != '' %}
-<h1 class="ggb__title">{{ section.settings.title }}</h1>
-{% endif %}
-{% if section.settings.subtitle != '' %}
-<p class="ggb__subtitle">{{ section.settings.subtitle }}</p>
-{% endif %}
-
-
-<div class="ggb__ctas">
-{% if section.settings.primary_label != '' and section.settings.primary_url != blank %}
-<a href="{{ section.settings.primary_url }}" class="ggb__btn ggb__btn--primary">
-<span>{{ section.settings.primary_label }}</span>
-<svg class="ggb__btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-<path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
-</a>
-{% endif %}
-{% if section.settings.secondary_label != '' and section.settings.secondary_url != blank %}
-<a href="{{ section.settings.secondary_url }}" class="ggb__btn ggb__btn--ghost">
-<span>{{ section.settings.secondary_label }}</span>
-</a>
-{% endif %}
-</div>
-
-
-{% if section.settings.bottom_note != '' %}
-<p class="ggb__note">{{ section.settings.bottom_note }}</p>
-{% endif %}
-</div>
-</div>
+      {% if section.settings.bottom_note != '' %}
+        <p class="ggb__note">{{ section.settings.bottom_note }}</p>
+      {% endif %}
+    </div>
+  </div>
 </section>
 
-
 <style>
-#gift-guide-banner-{{ section.id }} { --ggb-text: #111; --ggb-muted:#666; --ggb-bg:#fff; }
-#gift-guide-banner-{{ section.id }} .container{ max-width:1200px; margin:0 auto; padding:0 16px; }
+  #gift-guide-banner-{{ section.id }} { --ggb-text: #111; --ggb-muted:#666; --ggb-bg:#fff; }
+  #gift-guide-banner-{{ section.id }} .container{ max-width:1200px; margin:0 auto; padding:0 16px; }
 
+  .ggb__topbar{ background:#f6f6f6; border-bottom:1px solid #eee; }
+  .ggb__topbar-inner{ max-width:1200px; margin:0 auto; padding:10px 16px; display:flex; gap:.75rem; align-items:center; justify-content:center; font-size:14px; }
+  .ggb__topbar-text{ color:var(--ggb-muted); }
+  .ggb__topbar-link{ color:#111; text-decoration:underline; }
 
-.ggb__topbar{ background:#f6f6f6; border-bottom:1px solid #eee; }
-.ggb__topbar-inner{ max-width:1200px; margin:0 auto; padding:10px 16px; display:flex; gap:.75rem; align-items:center; justify-content:center; font-size:14px; }
-.ggb__topbar-text{ color:var(--ggb-muted); }
-.ggb__topbar-link{ color:#111; text-decoration:underline; }
+  .ggb__hero{ position:relative; background:var(--ggb-bg); overflow:hidden; }
+  .ggb__bg{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:{{ section.settings.bg_image_opacity | default: 100 }}%; }
+  .ggb__content{ position:relative; z-index:2; padding:64px 16px 48px; text-align:left; }
+  .ggb__kicker{ letter-spacing:.08em; text-transform:uppercase; font-weight:600; font-size:12px; color:var(--ggb-muted); margin:0 0 8px; }
+  .ggb__title{ font-size:clamp(32px,5vw,56px); line-height:1.05; margin:0 0 12px; color:var(--ggb-text); }
+  .ggb__subtitle{ max-width:720px; color:var(--ggb-muted); font-size:16px; line-height:1.6; margin:0 0 24px; }
 
+  .ggb__ctas{ display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+  .ggb__btn{ position:relative; display:inline-flex; align-items:center; gap:10px; padding:12px 18px; border-radius:999px; font-weight:600; text-decoration:none; transition:transform .2s ease, box-shadow .2s ease; will-change:transform; }
+  .ggb__btn--primary{ background:#111; color:#fff; }
+  .ggb__btn--ghost{ background:transparent; color:#111; border:1px solid #111; }
+  .ggb__btn:hover{ transform:translateY(-2px); box-shadow:0 8px 20px rgba(0,0,0,.12); }
+  .ggb__btn--primary .ggb__btn-icon{ transition: transform .25s ease; }
+  .ggb__btn--primary:hover .ggb__btn-icon{ transform: translateX(4px); }
 
-.ggb__hero{ position:relative; background:var(--ggb-bg); overflow:hidden; }
-.ggb__bg{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:{{ section.settings.bg_image_opacity | default: 100 }}%; }
-.ggb__content{ position:relative; z-index:2; padding:64px 16px 48px; text-align:left; }
-.ggb__kicker{ letter-spacing:.08em; text-transform:uppercase; font-weight:600; font-size:12px; color:var(--ggb-muted); margin:0 0 8px; }
+  .ggb__note{ margin-top:28px; font-size:12px; color:var(--ggb-muted); }
+</style>
+
+{% schema %}
+{
+  "name": "Gift Guide Banner",
+  "tag": "section",
+  "class": "section gift-guide-banner-section",
+  "settings": [
+    {"type":"text","id":"topbar_text","label":"Topbar text","default":"Find the ideal gift for your loved ones"},
+    {"type":"text","id":"topbar_link_label","label":"Topbar link label","default":"Choose gift →"},
+    {"type":"url","id":"topbar_link_url","label":"Topbar link URL"},
+
+    {"type":"text","id":"kicker","label":"Kicker (small heading)","default":"TISSO VISON"},
+    {"type":"text","id":"title","label":"Main title","default":"The Gift Guide"},
+    {"type":"textarea","id":"subtitle","label":"Subtitle","default":"Discover Joy: Our Ultimate Holiday Gift Destination. Explore our curated collection and find the perfect gifts to delight your loved ones this holiday season."},
+
+    {"type":"text","id":"primary_label","label":"Primary button label","default":"Shop Now"},
+    {"type":"url","id":"primary_url","label":"Primary button URL"},
+
+    {"type":"text","id":"secondary_label","label":"Secondary button label","default":"Learn More"},
+    {"type":"url","id":"secondary_url","label":"Secondary button URL"},
+
+    {"type":"text","id":"bottom_note","label":"Bottom note","default":"SUSTAINABLE, ETHICALLY MADE GIFTS IN EVERY BUDGET"},
+
+    {"type":"image_picker","id":"bg_image","label":"Background illustration/image"},
+    {"type":"range","id":"bg_image_opacity","min":0,"max":100,"step":5,"unit":"%","label":"Background image opacity","default":100}
+  ],
+  "presets": [
+    {"name":"Gift Guide Banner (Custom)", "category":"Custom"}
+  ]
+}
 {% endschema %}
