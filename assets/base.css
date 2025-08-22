@@ -3631,6 +3631,6 @@ details-disclosure > details {
   color: #555;
 }
 .ggb__content.container{
-  height: 700px;
+  height: 100vh;
 
 }
