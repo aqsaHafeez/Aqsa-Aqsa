@@ -99,6 +99,56 @@
     text-align: center;
     background-color: #fff;
     margin-bottom: 0; }
+    /* Add transition for smoother animation */
+.ggb__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  text-transform: uppercase;
+  padding: 8px 20px;
+  border-radius: 5px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+
+  /* Transition for animation */
+  transition: all 0.3s ease-in-out;
+  will-change: transform, box-shadow;
+}
+
+/* Primary button */
+.ggb__btn--primary {
+  background: #111;
+  color: #fff;
+}
+
+/* Ghost button */
+.ggb__btn--ghost {
+  background: transparent;
+  color: #111;
+  border: 1px solid #111;
+}
+
+/* Hover effects with scale and shadow */
+.ggb__btn:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Icon animation on hover (already present, enhanced a bit) */
+.ggb__btn--primary .ggb__btn-icon {
+  transition: transform 0.3s ease;
+}
+.ggb__btn--primary:hover .ggb__btn-icon {
+  transform: translateX(6px);
+}
+
+/* Optional: a subtle "pulse" animation when hovered */
+.ggb__btn:active {
+  transform: scale(0.97);
+}
+
 </style>
 
 {% schema %}
