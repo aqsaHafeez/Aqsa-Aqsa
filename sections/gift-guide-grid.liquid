@@ -9,39 +9,25 @@
   <div class="gggrid container">
     <h2 class="sr-only">Gift Guide In The Wild</h2>
     <div class="gggrid__wrap">
-      {% for i in (1..6) %}
-        {% assign key = 'image_' | append: i %}
-        {% assign img = section.settings[key] %}
-        {% if img != blank %}
-          {% assign alt_key = 'alt_' | append: i %}
-          <div class="gggrid__item">
-            <div class="gggrid__media">
-              {{ img | image_url: width: 1200 | image_tag: loading: 'lazy', class: 'gggrid__img', alt: section.settings[alt_key] }}
+{% for i in (1..4) %}
+  {% assign img_key = "image_" | append: i %}
+  {% assign alt_key = "alt_" | append: i %}
+  {% assign img = section.settings[img_key] %}
 
-              {% for h in (1..3) %}
-                {% assign enable_key = 'h' | append: i | append: '_' | append: h | append: '_enable' %}
-                {% assign enabled = section.settings[enable_key] %}
-                {% if enabled %}
-                  {% assign top_key = 'h' | append: i | append: '_' | append: h | append: '_top' %}
-                  {% assign left_key = 'h' | append: i | append: '_' | append: h | append: '_left' %}
-                  {% assign title_key = 'h' | append: i | append: '_' | append: h | append: '_title' %}
-                  {% assign text_key = 'h' | append: i | append: '_' | append: h | append: '_text' %}
-                  {% assign url_key = 'h' | append: i | append: '_' | append: h | append: '_url' %}
+  <div class="gggrid__item">
+    {{ img | image_url: width: 1200 | image_tag: loading: 'lazy', class: 'gggrid__img', alt: section.settings[alt_key] }}
 
-                  <button class="gggrid__dot" type="button" style="top: {{ section.settings[top_key] }}%; left: {{ section.settings[left_key] }}%" aria-haspopup="dialog" aria-label="Open info">
-                    <span class="gggrid__dot-core"></span>
-                    <span class="gggrid__popup" role="dialog" aria-modal="false">
-                      {% if section.settings[title_key] != blank %}<strong class="gggrid__popup-title">{{ section.settings[title_key] }}</strong>{% endif %}
-                      {% if section.settings[text_key] != blank %}<span class="gggrid__popup-text">{{ section.settings[text_key] }}</span>{% endif %}
-                      {% if section.settings[url_key] != blank %}<a class="gggrid__popup-link" href="{{ section.settings[url_key] }}">View product</a>{% endif %}
-                    </span>
-                  </button>
-                {% endif %}
-              {% endfor %}
-            </div>
-          </div>
-        {% endif %}
-      {% endfor %}
+    <button class="gggrid__dot" type="button" style="top: 70%; left: 25%" aria-haspopup="dialog" aria-label="Open info" aria-expanded="false">
+      <span class="gggrid__dot-core"></span>
+      <span class="gggrid__popup" role="dialog" aria-modal="false">
+        <strong class="gggrid__popup-title">Black Leather Bag</strong>
+        <span class="gggrid__popup-text">Short description about this item.</span>
+        <a class="gggrid__popup-link" href="/products/black-leather-bag">View product</a>
+      </span>
+    </button>
+  </div>
+{% endfor %}
+
     </div>
   </div>
 </section>
