@@ -7,11 +7,11 @@
 
 <section id="gift-guide-banner-{{ section.id }}" class="gift-guide-banner">
   <div class="ggb__topbar">
-    {% if section.settings.kicker != '' %}
-        <p class="ggb__kicker">{{ section.settings.kicker }}</p>
-      {% endif %}
     {% if section.settings.topbar_text != '' %}
       <div class="ggb__topbar-inner">
+        {% if section.settings.kicker != '' %}
+        <p class="ggb__kicker">{{ section.settings.kicker }}</p>
+      {% endif %}
         <span class="ggb__topbar-text">{{ section.settings.topbar_text }}</span>
         {% if section.settings.topbar_link_url != blank and section.settings.topbar_link_label != '' %}
           <a class="ggb__topbar-link" href="{{ section.settings.topbar_link_url }}">{{ section.settings.topbar_link_label }}</a>
