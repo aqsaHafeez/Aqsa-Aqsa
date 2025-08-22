@@ -3631,7 +3631,6 @@ details-disclosure > details {
   color: #555;
 }
 .ggb__content.container {
-    height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
