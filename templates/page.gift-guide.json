@@ -9,15 +9,8 @@
  */
 {
   "sections": {
-    "main": {
-      "type": "main-page",
-      "settings": {
-        "padding_top": 28,
-        "padding_bottom": 28
-      }
-    }
+    "main": {"type": "gift-guide-banner", "settings": {}},
+    "grid": {"type": "gift-guide-grid", "settings": {}}
   },
-  "order": [
-    "main"
-  ]
+  "order": ["main", "grid"]
 }
