@@ -1,0 +1,134 @@
+{% comment %}
+  Custom Grid Section with Hotspot Popups (built from scratch)
+  - 6-image grid (responsive)
+  - Each image supports up to 3 hotspot circles (configurable position and content)
+  - Clicking a hotspot opens a popup near the circle; clicking outside closes it
+{% endcomment %}
+
+<section id="gift-guide-grid-{{ section.id }}" class="gift-guide-grid">
+  <div class="gggrid container">
+    <h2 class="sr-only">Gift Guide In The Wild</h2>
+    <div class="gggrid__wrap">
+      {% for i in (1..6) %}
+        {% assign key = 'image_' | append: i %}
+        {% assign img = section.settings[key] %}
+        {% if img != blank %}
+          {% assign alt_key = 'alt_' | append: i %}
+          <div class="gggrid__item">
+            <div class="gggrid__media">
+              {{ img | image_url: width: 1200 | image_tag: loading: 'lazy', class: 'gggrid__img', alt: section.settings[alt_key] }}
+
+              {% for h in (1..3) %}
+                {% assign enable_key = 'h' | append: i | append: '_' | append: h | append: '_enable' %}
+                {% assign enabled = section.settings[enable_key] %}
+                {% if enabled %}
+                  {% assign top_key = 'h' | append: i | append: '_' | append: h | append: '_top' %}
+                  {% assign left_key = 'h' | append: i | append: '_' | append: h | append: '_left' %}
+                  {% assign title_key = 'h' | append: i | append: '_' | append: h | append: '_title' %}
+                  {% assign text_key = 'h' | append: i | append: '_' | append: h | append: '_text' %}
+                  {% assign url_key = 'h' | append: i | append: '_' | append: h | append: '_url' %}
+
+                  <button class="gggrid__dot" type="button" style="top: {{ section.settings[top_key] }}%; left: {{ section.settings[left_key] }}%" aria-haspopup="dialog" aria-label="Open info">
+                    <span class="gggrid__dot-core"></span>
+                    <span class="gggrid__popup" role="dialog" aria-modal="false">
+                      {% if section.settings[title_key] != blank %}<strong class="gggrid__popup-title">{{ section.settings[title_key] }}</strong>{% endif %}
+                      {% if section.settings[text_key] != blank %}<span class="gggrid__popup-text">{{ section.settings[text_key] }}</span>{% endif %}
+                      {% if section.settings[url_key] != blank %}<a class="gggrid__popup-link" href="{{ section.settings[url_key] }}">View product</a>{% endif %}
+                    </span>
+                  </button>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<style>
+  #gift-guide-grid-{{ section.id }} .container{ max-width:1200px; margin:0 auto; padding:0 16px; }
+  .gggrid__wrap{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+  @media (max-width: 900px){ .gggrid__wrap{ grid-template-columns:repeat(2,1fr);} }
+  @media (max-width: 640px){ .gggrid__wrap{ grid-template-columns:1fr; } }
+
+  .gggrid__item{ position:relative; border-radius:8px; overflow:hidden; }
+  .gggrid__media{ position:relative; }
+  .gggrid__img{ display:block; width:100%; height:auto; }
+
+  .gggrid__dot{ position:absolute; transform:translate(-50%, -50%); width:24px; height:24px; border-radius:50%; border:2px solid #fff; background:#111; display:grid; place-items:center; cursor:pointer; outline:none; }
+  .gggrid__dot-core{ width:6px; height:6px; border-radius:50%; background:#fff; animation:pulse 1.6s infinite; }
+  @keyframes pulse{ 0%{ transform:scale(1); opacity:1;} 70%{transform:scale(1.8); opacity:.2;} 100%{transform:scale(1); opacity:0;} }
+
+  .gggrid__popup{ position:absolute; top:-12px; left:calc(100% + 10px); transform:translateY(-100%); min-width:200px; max-width:260px; background:#fff; color:#111; border:1px solid #e5e5e5; box-shadow:0 10px 24px rgba(0,0,0,.12); border-radius:10px; padding:12px; display:none; z-index:5; text-align:left; }
+  .gggrid__popup::after{ content:""; position:absolute; right:100%; top:calc(100% - 10px); width:0; height:0; border-top:8px solid transparent; border-bottom:8px solid transparent; border-right:8px solid #fff; filter:drop-shadow(0 0 0 rgba(0,0,0,0.12)); }
+  .gggrid__popup-title{ display:block; font-weight:700; margin-bottom:6px; }
+  .gggrid__popup-text{ display:block; font-size:14px; color:#444; }
+  .gggrid__popup-link{ display:inline-block; margin-top:8px; font-weight:600; text-decoration:underline; }
+  .gggrid__dot[aria-expanded="true"] .gggrid__popup{ display:block; }
+</style>
+
+<script>
+  (function(){
+    const root = document.getElementById('gift-guide-grid-{{ section.id }}');
+    if(!root) return;
+
+    function closeAll(){
+      root.querySelectorAll('.gggrid__dot[aria-expanded="true"]').forEach(btn=>btn.setAttribute('aria-expanded','false'));
+    }
+
+    root.addEventListener('click', function(e){
+      const btn = e.target.closest('.gggrid__dot');
+      if(!btn){ closeAll(); return; }
+      const isOpen = btn.getAttribute('aria-expanded') === 'true';
+      closeAll();
+      btn.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+    });
+
+    document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeAll(); });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Gift Guide Grid",
+  "settings": [
+    {"type":"header","content":"Images"},
+    {"type":"image_picker","id":"image_1","label":"Image 1"},
+    {"type":"text","id":"alt_1","label":"Alt text 1"},
+    {"type":"image_picker","id":"image_2","label":"Image 2"},
+    {"type":"text","id":"alt_2","label":"Alt text 2"},
+    {"type":"image_picker","id":"image_3","label":"Image 3"},
+    {"type":"text","id":"alt_3","label":"Alt text 3"},
+    {"type":"image_picker","id":"image_4","label":"Image 4"},
+    {"type":"text","id":"alt_4","label":"Alt text 4"},
+    {"type":"image_picker","id":"image_5","label":"Image 5"},
+    {"type":"text","id":"alt_5","label":"Alt text 5"},
+    {"type":"image_picker","id":"image_6","label":"Image 6"},
+    {"type":"text","id":"alt_6","label":"Alt text 6"},
+    {"type":"header","content":"Hotspots – per image (up to 3 each)"},
+    {"type":"checkbox","id":"h1_1_enable","label":"Enable hotspot 1 on Image 1","default":true},
+    {"type":"range","id":"h1_1_top","label":"Image 1 – Hotspot 1 – Top %","min":0,"max":100,"step":1,"unit":"%","default":70},
+    {"type":"range","id":"h1_1_left","label":"Image 1 – Hotspot 1 – Left %","min":0,"max":100,"step":1,"unit":"%","default":25},
+    {"type":"text","id":"h1_1_title","label":"Image 1 – Hotspot 1 – Title","default":"Featured product"},
+    {"type":"textarea","id":"h1_1_text","label":"Image 1 – Hotspot 1 – Text","default":"Short description about this item."},
+    {"type":"url","id":"h1_1_url","label":"Image 1 – Hotspot 1 – Link"},
+    {"type":"checkbox","id":"h1_2_enable","label":"Enable hotspot 2 on Image 1","default":false},
+    {"type":"range","id":"h1_2_top","label":"Image 1 – Hotspot 2 – Top %","min":0,"max":100,"step":1,"unit":"%","default":40},
+    {"type":"range","id":"h1_2_left","label":"Image 1 – Hotspot 2 – Left %","min":0,"max":100,"step":1,"unit":"%","default":60},
+    {"type":"text","id":"h1_2_title","label":"Image 1 – Hotspot 2 – Title"},
+    {"type":"textarea","id":"h1_2_text","label":"Image 1 – Hotspot 2 – Text"},
+    {"type":"url","id":"h1_2_url","label":"Image 1 – Hotspot 2 – Link"},
+    {"type":"checkbox","id":"h1_3_enable","label":"Enable hotspot 3 on Image 1","default":false},
+    {"type":"range","id":"h1_3_top","label":"Image 1 – Hotspot 3 – Top %","min":0,"max":100,"step":1,"unit":"%","default":20},
+    {"type":"range","id":"h1_3_left","label":"Image 1 – Hotspot 3 – Left %","min":0,"max":100,"step":1,"unit":"%","default":20},
+    {"type":"text","id":"h1_3_title","label":"Image 1 – Hotspot 3 – Title"},
+    {"type":"textarea","id":"h1_3_text","label":"Image 1 – Hotspot 3 – Text"},
+    {"type":"url","id":"h1_3_url","label":"Image 1 – Hotspot 3 – Link"}
+    /* Repeat similar hotspot settings for Images 2–6 */
+  ],
+  "presets": [
+    {"name":"Gift Guide Grid (Custom)", "category":"Custom"}
+  ]
+}
+{% endschema %}
