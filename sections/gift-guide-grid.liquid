@@ -20,9 +20,7 @@
     <button class="gggrid__dot" type="button" style="top: 70%; left: 25%" aria-haspopup="dialog" aria-label="Open info" aria-expanded="false">
   <span class="gggrid__dot-plus">+</span>
  <span class="gggrid__popup" role="dialog" aria-modal="false">
-    <strong class="gggrid__popup-title"></strong>
-    <span class="gggrid__popup-text"></span>
-    <a class="gggrid__popup-link" href="#">View product</a>
+    <div class="gggrid__popup-content"></div>
   </span>
 </button>
   </div>
@@ -57,31 +55,104 @@
   .gggrid__popup-text{ display:block; font-size:14px; color:#444; }
   .gggrid__popup-link{ display:inline-block; margin-top:8px; font-weight:600; text-decoration:underline; }
   .gggrid__dot[aria-expanded="true"] .gggrid__popup{ display:block; }
+  .gggrid__popup {
+  display: none;
+  position: absolute;
+  background: #fff;
+  color: #111;
+  padding: 16px;
+  border: 1px solid #ddd;
+  width: 280px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  z-index: 999;
+  border-radius: 4px;
+}
+
+.gggrid__dot[aria-expanded="true"] .gggrid__popup {
+  display: block;
+}
+
+.gggrid__popup img {
+  width: 100%;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.color-btn {
+  background: none;
+  border: 1px solid #111;
+  padding: 4px 8px;
+  margin-right: 4px;
+  cursor: pointer;
+}
+
+.add-to-cart-btn {
+  display: block;
+  width: 100%;
+  background: #000;
+  color: #fff;
+  padding: 10px;
+  margin-top: 12px;
+  text-align: center;
+  border: none;
+  cursor: pointer;
+}
+
 </style>
 
 <script>
-  document.querySelectorAll('.gggrid__dot').forEach(button => {
-  button.addEventListener('click', async () => {
-    const handle = button.dataset.handle;
-    const popup = button.querySelector('.gggrid__popup');
-    const titleEl = popup.querySelector('.gggrid__popup-title');
-    const textEl = popup.querySelector('.gggrid__popup-text');
-    const linkEl = popup.querySelector('.gggrid__popup-link');
+ document.querySelectorAll('.gggrid__dot').forEach(dot => {
+  dot.addEventListener('click', async function () {
+    const handle = this.dataset.productHandle;
+    const popupContent = this.querySelector('.gggrid__popup-content');
+
+    if (!handle) return;
+
+    // Toggle popup visibility
+    const expanded = this.getAttribute('aria-expanded') === 'true';
+    document.querySelectorAll('.gggrid__dot').forEach(btn => btn.setAttribute('aria-expanded', 'false'));
+    this.setAttribute('aria-expanded', !expanded);
+
+    if (expanded) return; // close if already open
 
     try {
       const res = await fetch(`/products/${handle}.js`);
       const product = await res.json();
 
-      titleEl.textContent = product.title;
-      textEl.innerHTML = product.body_html.replace(/<[^>]*>?/gm, '').slice(0, 100) + '...';
-      linkEl.href = product.url;
+      // Build color/variant options dynamically
+      const colorOptions = product.options.includes('Color')
+        ? product.variants
+            .map(v => `<button class="color-btn">${v.option1}</button>`)
+            .join('')
+        : '';
 
-      popup.style.display = 'block'; // Show popup
+      const sizeOptions = product.options.includes('Size')
+        ? product.options_with_values
+            .find(o => o.name === 'Size')
+            .values
+            .map(v => `<option value="${v}">${v}</option>`)
+            .join('')
+        : '';
+
+      popupContent.innerHTML = `
+        <img src="${product.images[0]}" alt="${product.title}" style="width:100px; height:auto; margin-bottom:8px;">
+        <strong>${product.title}</strong>
+        <p>${Shopify.formatMoney(product.price)}</p>
+        <p>${product.description.substring(0,100)}...</p>
+        <div class="colors">${colorOptions}</div>
+        <select class="sizes">
+          <option value="">Choose your size</option>
+          ${sizeOptions}
+        </select>
+        <button class="add-to-cart-btn" data-id="${product.variants[0].id}">ADD TO CART</button>
+      `;
     } catch (err) {
-      console.error('Failed to fetch product:', err);
+      console.error(err);
+      popupContent.innerHTML = `<span style="color:red;">Error loading product.</span>`;
     }
   });
 });
+
   (function(){
     const root = document.getElementById('gift-guide-grid-{{ section.id }}');
     if(!root) return;
