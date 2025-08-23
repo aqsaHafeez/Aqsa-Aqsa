@@ -18,13 +18,13 @@
     {{ img | image_url: width: 1200 | image_tag: loading: 'lazy', class: 'gggrid__img', alt: section.settings[alt_key] }}
 
     <button class="gggrid__dot" type="button" style="top: 70%; left: 25%" aria-haspopup="dialog" aria-label="Open info" aria-expanded="false">
-      <span class="gggrid__dot-core">+</span>
-      <span class="gggrid__popup" role="dialog" aria-modal="false">
-        <strong class="gggrid__popup-title">Black Leather Bag</strong>
-        <span class="gggrid__popup-text">Short description about this item.</span>
-        <a class="gggrid__popup-link" href="/products/black-leather-bag">View product</a>
-      </span>
-    </button>
+  <span class="gggrid__dot-plus">+</span>
+  <span class="gggrid__popup" role="dialog" aria-modal="false">
+    <strong class="gggrid__popup-title">Black Leather Bag</strong>
+    <span class="gggrid__popup-text">Short description about this item.</span>
+    <a class="gggrid__popup-link" href="/products/black-leather-bag">View product</a>
+  </span>
+</button>
   </div>
 {% endfor %}
 
@@ -33,6 +33,29 @@
 </section>
 
 <style>
+  .gggrid__dot {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 32px; /* slightly larger for visibility */
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  background: #111;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  outline: none;
+  font-size: 18px;  /* size of plus sign */
+  color: #fff;      /* plus sign color */
+  font-weight: bold;
+  line-height: 1;   /* keep it vertically centered */
+}
+
+.gggrid__dot-plus {
+  pointer-events: none; /* ensures click works on button, not text */
+}
+
   #gift-guide-grid-{{ section.id }} .container{ max-width:1200px; margin:0 auto; padding:0 16px; }
   .gggrid__wrap{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
   @media (max-width: 900px){ .gggrid__wrap{ grid-template-columns:repeat(2,1fr);} }
