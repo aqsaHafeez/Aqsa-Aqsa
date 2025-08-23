@@ -20,7 +20,12 @@
     <button class="gggrid__dot" type="button" style="top: 70%; left: 25%" aria-haspopup="dialog" aria-label="Open info" aria-expanded="false">
   <span class="gggrid__dot-plus">+</span>
  <span class="gggrid__popup" role="dialog" aria-modal="false">
-    <div class="gggrid__popup-content"></div>
+    <div class="gggrid__popup-content">
+      <strong>Blue Silk Tuxedo</strong>
+      <p>$70.00 CAD</p>
+      <p>Blue silk tuxedo with marbled aquatic pattern and dark lining. Sleeves are complete with signature cuffs.</p>
+      <button class="add-to-cart-btn">Add to Cart</button>
+    </div>
   </span>
 </button>
   </div>
@@ -236,57 +241,6 @@
 </style>
 
 <script>
- document.querySelectorAll('.gggrid__dot').forEach(dot => {
-  dot.addEventListener('click', async function () {
-    const handle = this.dataset.productHandle;
-    const popupContent = this.querySelector('.gggrid__popup-content');
-
-    if (!handle) return;
-
-    // Toggle popup visibility
-    const expanded = this.getAttribute('aria-expanded') === 'true';
-    document.querySelectorAll('.gggrid__dot').forEach(btn => btn.setAttribute('aria-expanded', 'false'));
-    this.setAttribute('aria-expanded', !expanded);
-
-    if (expanded) return; // close if already open
-
-    try {
-      const res = await fetch(`/products/${handle}.js`);
-      const product = await res.json();
-
-      // Build color/variant options dynamically
-      const colorOptions = product.options.includes('Color')
-        ? product.variants
-            .map(v => `<button class="color-btn">${v.option1}</button>`)
-            .join('')
-        : '';
-
-      const sizeOptions = product.options.includes('Size')
-        ? product.options_with_values
-            .find(o => o.name === 'Size')
-            .values
-            .map(v => `<option value="${v}">${v}</option>`)
-            .join('')
-        : '';
-
-      popupContent.innerHTML = `
-        <img src="${product.images[0]}" alt="${product.title}" style="width:100px; height:auto; margin-bottom:8px;">
-        <strong>${product.title}</strong>
-        <p>${Shopify.formatMoney(product.price)}</p>
-        <p>${product.description.substring(0,100)}...</p>
-        <div class="colors">${colorOptions}</div>
-        <select class="sizes">
-          <option value="">Choose your size</option>
-          ${sizeOptions}
-        </select>
-        <button class="add-to-cart-btn" data-id="${product.variants[0].id}">ADD TO CART</button>
-      `;
-    } catch (err) {
-      console.error(err);
-      popupContent.innerHTML = `<span style="color:red;">Error loading product.</span>`;
-    }
-  });
-});
 
   (function(){
     const root = document.getElementById('gift-guide-grid-{{ section.id }}');
