@@ -97,6 +97,141 @@
   border: none;
   cursor: pointer;
 }
+/* Container & Grid */
+#gift-guide-grid-{{ section.id }} .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+.gggrid__wrap {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+@media (max-width: 900px) {
+  .gggrid__wrap {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 640px) {
+  .gggrid__wrap {
+    grid-template-columns: 1fr;
+  }
+}
+
+.gggrid__item {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.gggrid__img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Hotspot button - bigger on mobile for tap */
+.gggrid__dot {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  background: #111;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  outline: none;
+  background-color: white;
+}
+.gggrid__dot-plus {
+  pointer-events: none;
+  font-weight: bold;
+}
+
+/* Popup Styles */
+.gggrid__popup {
+  position: absolute;
+  top: -12px;
+  left: calc(100% + 10px);
+  transform: translateY(-100%);
+  min-width: 200px;
+  max-width: 260px;
+  background: #fff;
+  color: #111;
+  border: 1px solid #e5e5e5;
+  box-shadow: 0 10px 24px rgba(0,0,0,.12);
+  border-radius: 10px;
+  padding: 12px;
+  display: none;
+  z-index: 5;
+  text-align: left;
+  word-wrap: break-word;
+}
+.gggrid__dot[aria-expanded="true"] .gggrid__popup {
+  display: block;
+}
+.gggrid__popup::after {
+  content: "";
+  position: absolute;
+  right: 100%;
+  top: calc(100% - 10px);
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-right: 8px solid #fff;
+  filter: drop-shadow(0 0 0 rgba(0,0,0,0.12));
+}
+
+/* Responsive popup on small screens */
+@media (max-width: 480px) {
+  .gggrid__popup {
+    left: 50% !important;
+    top: 100% !important;
+    transform: translate(-50%, 10px); /* drop below hotspot and center */
+    max-width: 90vw;
+    width: auto;
+  }
+  .gggrid__popup::after {
+    display: none; /* hide arrow to prevent weird positioning */
+  }
+}
+
+/* Product info in popup */
+.gggrid__popup img {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+.color-btn {
+  background: none;
+  border: 1px solid #111;
+  padding: 4px 8px;
+  margin-right: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+.add-to-cart-btn {
+  display: block;
+  width: 100%;
+  background: #000;
+  color: #fff;
+  padding: 10px;
+  margin-top: 12px;
+  text-align: center;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* Optional: Adjust dot size slightly for easier tapping on very small screens */
+@media (max-width: 480px) {
+  .gggrid__dot {
+    width: 32px;
+    height: 32px;
+  }
+}
 
 </style>
 
