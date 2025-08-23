@@ -1,183 +1,218 @@
 {% comment %}
-  Custom Banner Section (built from scratch)
-  - Editable texts (eyebrow/topbar, headline, subheading, CTA buttons, bottom note)
-  - Optional background image/illustration
-  - Button hover animation
+  Custom Grid Section with Hotspot Popups (built from scratch)
+  - 6-image grid (responsive)
+  - Each image supports up to 3 hotspot circles (configurable position and content)
+  - Clicking a hotspot opens a popup near the circle; clicking outside closes it
 {% endcomment %}
 
-<section id="gift-guide-banner-{{ section.id }}" class="gift-guide-banner">
-  <div class="ggb__topbar">
-    {% if section.settings.topbar_text != '' %}
-      <div class="ggb__topbar-inner">
-        {% if section.settings.kicker != '' %}
-        <p class="ggb__kicker">{{ section.settings.kicker }}</p>
-      {% endif %}
-        <span class="ggb__topbar-text">{{ section.settings.topbar_text }}</span>
-        {% if section.settings.topbar_link_url != blank and section.settings.topbar_link_label != '' %}
-          <a class="ggb__topbar-link" href="{{ section.settings.topbar_link_url }}">{{ section.settings.topbar_link_label }}</a>
-        {% endif %}
-      </div>
-    {% endif %}
+<section id="gift-guide-grid-{{ section.id }}" class="gift-guide-grid">
+  <div class="gggrid container">
+    <h2 class="sr-only">Gift Guide In The Wild</h2>
+    <div class="gggrid__wrap">
+{% for i in (1..6) %}
+  {% assign img_key = "image_" | append: i %}
+  {% assign alt_key = "alt_" | append: i %}
+  {% assign img = section.settings[img_key] %}
+
+  <div class="gggrid__item">
+    {{ img | image_url: width: 1200 | image_tag: loading: 'lazy', class: 'gggrid__img', alt: section.settings[alt_key] }}
+
+    <button class="gggrid__dot" type="button" style="top: 70%; left: 25%" aria-haspopup="dialog" aria-label="Open info" aria-expanded="false">
+  <span class="gggrid__dot-plus">+</span>
+ <span class="gggrid__popup" role="dialog" aria-modal="false">
+    <div class="gggrid__popup-content"></div>
+  </span>
+</button>
   </div>
+{% endfor %}
 
-  <div class="ggb__hero">
-    {% if section.settings.bg_image != blank %}
-      {{ section.settings.bg_image | image_url: width: 2000 | image_tag: loading: 'eager', class: 'ggb__bg' }}
-    {% endif %}
-
-    <div class="ggb__content container">
-      {% if section.settings.title != '' %}
-        <h1 class="ggb__title">{{ section.settings.title }}</h1>
-      {% endif %}
-      {% if section.settings.subtitle != '' %}
-        <p class="ggb__subtitle">{{ section.settings.subtitle }}</p>
-      {% endif %}
-
-      <div class="ggb__ctas">
-        {% if section.settings.primary_label != '' and section.settings.primary_url != blank %}
-          <a href="{{ section.settings.primary_url }}" class="ggb__btn ggb__btn--primary">
-            <span>{{ section.settings.primary_label }}</span>
-            <svg class="ggb__btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </a>
-        {% endif %}
-        {% if section.settings.secondary_label != '' and section.settings.secondary_url != blank %}
-          <a href="{{ section.settings.secondary_url }}" class="ggb__btn ggb__btn--ghost">
-            <span>{{ section.settings.secondary_label }}</span>
-          </a>
-        {% endif %}
-      </div>
-
-      {% if section.settings.bottom_note != '' %}
-        <p class="ggb__note">{{ section.settings.bottom_note }}</p>
-      {% endif %}
     </div>
   </div>
 </section>
 
 <style>
-  #gift-guide-banner-{{ section.id }} { --ggb-text: #111; --ggb-muted:#666; --ggb-bg:#fff; }
-  #gift-guide-banner-{{ section.id }} .container{ height: 100%; max-width:1200px; margin:0 auto; padding:0 16px; }
 
-  .ggb__topbar{ background:#f6f6f6; border-bottom:1px solid #eee; }
-  .ggb__topbar-inner{ max-width:1200px; margin:0 auto; padding:10px 16px; display:flex; gap:.75rem; align-items:center; justify-content:space-between; font-size:14px; }
-  .ggb__topbar-text{ color:var(--ggb-muted); }
-  .ggb__topbar-link {
-    color: #111;
-    text-decoration: none;
-    text-transform: uppercase;
-    background-color: yellow;
-    padding: 4px 12px;
-    border-radius: 5px;
+.gggrid__dot-plus {
+  pointer-events: none;
 }
 
-  .ggb__hero{ height: 90vh; position:relative; background:var(--ggb-bg); overflow:hidden; }
-  .ggb__bg{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:{{ section.settings.bg_image_opacity | default: 100 }}%; }
-  .ggb__content{ position:relative; z-index:2; padding:64px 16px 48px; text-align:left; }
-  .ggb__kicker{ letter-spacing:.08em; text-transform:uppercase; font-weight:600; font-size:12px; color:var(--ggb-muted); margin:0; }
-  .ggb__title{ font-size:clamp(32px,5vw,56px); line-height:1.05; margin:0 0 12px; color:var(--ggb-text); }
-  .ggb__subtitle{ max-width:400px; color:var(--ggb-muted); font-size:16px; line-height:1.6; margin:0 0 24px; }
+  #gift-guide-grid-{{ section.id }} .container{ max-width:1200px; margin:0 auto; padding:0 16px; }
+  .gggrid__wrap{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+  @media (max-width: 900px){ .gggrid__wrap{ grid-template-columns:repeat(2,1fr);} }
+  @media (max-width: 640px){ .gggrid__wrap{ grid-template-columns:1fr; } }
 
-  .ggb__ctas{ display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
-  .ggb__btn{ display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    text-decoration: none;
-    text-transform: uppercase;
-    padding: 4px 12px;
-    border-radius: 5px;}
-  .ggb__btn--primary{ background:#111; color:#fff; }
-  .ggb__btn--ghost{ background:transparent; color:#111; border:1px solid #111; }
-  .ggb__btn:hover{ transform:translateY(-2px); box-shadow:0 8px 20px rgba(0,0,0,.12); }
-  .ggb__btn--primary .ggb__btn-icon{ transition: transform .25s ease; }
-  .ggb__btn--primary:hover .ggb__btn-icon{ transform: translateX(4px); }
+  .gggrid__item{ position:relative; border-radius:8px; overflow:hidden; }
+  .gggrid__media{ position:relative; }
+  .gggrid__img{ display:block; width:100%; height:auto; }
 
-  .ggb__note{     margin-top: 28px;
-    font-size: 12px;
-    color: var(--ggb-muted);
-    text-align: center;
-    background-color: #fff;
-    margin-bottom: 0; }
-    /* Add transition for smoother animation */
-.ggb__btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  text-decoration: none;
-  text-transform: uppercase;
-  padding: 8px 20px;
-  border-radius: 5px;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  cursor: pointer;
+  .gggrid__dot{ position:absolute; transform:translate(-50%, -50%); width:24px; height:24px; border-radius:50%; border:2px solid #fff; background:#111; display:grid; place-items:center; cursor:pointer; outline:none;background-color: white;  }
+  .gggrid__dot-core{ width:6px; height:6px; border-radius:50%; background:#fff; animation:pulse 1.6s infinite; }
+  @keyframes pulse{ 0%{ transform:scale(1); opacity:1;} 70%{transform:scale(1.8); opacity:.2;} 100%{transform:scale(1); opacity:0;} }
 
-  /* Transition for animation */
-  transition: all 0.3s ease-in-out;
-  will-change: transform, box-shadow;
-}
-
-/* Primary button */
-.ggb__btn--primary {
-  background: #111;
-  color: #fff;
-}
-
-/* Ghost button */
-.ggb__btn--ghost {
-  background: transparent;
+  .gggrid__popup{ position:absolute; top:-12px; left:calc(100% + 10px); transform:translateY(-100%); min-width:200px; max-width:260px; background:#fff; color:#111; border:1px solid #e5e5e5; box-shadow:0 10px 24px rgba(0,0,0,.12); border-radius:10px; padding:12px; display:none; z-index:5; text-align:left; }
+  .gggrid__popup::after{ content:""; position:absolute; right:100%; top:calc(100% - 10px); width:0; height:0; border-top:8px solid transparent; border-bottom:8px solid transparent; border-right:8px solid #fff; filter:drop-shadow(0 0 0 rgba(0,0,0,0.12)); }
+  .gggrid__popup-title{ display:block; font-weight:700; margin-bottom:6px; }
+  .gggrid__popup-text{ display:block; font-size:14px; color:#444; }
+  .gggrid__popup-link{ display:inline-block; margin-top:8px; font-weight:600; text-decoration:underline; }
+  .gggrid__dot[aria-expanded="true"] .gggrid__popup{ display:block; }
+  .gggrid__popup {
+  display: none;
+  position: absolute;
+  background: #fff;
   color: #111;
+  padding: 16px;
+  border: 1px solid #ddd;
+  width: 280px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  z-index: 999;
+  border-radius: 4px;
+}
+
+.gggrid__dot[aria-expanded="true"] .gggrid__popup {
+  display: block;
+}
+
+.gggrid__popup img {
+  width: 100%;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.color-btn {
+  background: none;
   border: 1px solid #111;
+  padding: 4px 8px;
+  margin-right: 4px;
+  cursor: pointer;
 }
 
-/* Hover effects with scale and shadow */
-.ggb__btn:hover {
-  transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-}
-
-/* Icon animation on hover (already present, enhanced a bit) */
-.ggb__btn--primary .ggb__btn-icon {
-  transition: transform 0.3s ease;
-}
-.ggb__btn--primary:hover .ggb__btn-icon {
-  transform: translateX(6px);
-}
-
-/* Optional: a subtle "pulse" animation when hovered */
-.ggb__btn:active {
-  transform: scale(0.97);
+.add-to-cart-btn {
+  display: block;
+  width: 100%;
+  background: #000;
+  color: #fff;
+  padding: 10px;
+  margin-top: 12px;
+  text-align: center;
+  border: none;
+  cursor: pointer;
 }
 
 </style>
 
+<script>
+ document.querySelectorAll('.gggrid__dot').forEach(dot => {
+  dot.addEventListener('click', async function () {
+    const handle = this.dataset.productHandle;
+    const popupContent = this.querySelector('.gggrid__popup-content');
+
+    if (!handle) return;
+
+    // Toggle popup visibility
+    const expanded = this.getAttribute('aria-expanded') === 'true';
+    document.querySelectorAll('.gggrid__dot').forEach(btn => btn.setAttribute('aria-expanded', 'false'));
+    this.setAttribute('aria-expanded', !expanded);
+
+    if (expanded) return; // close if already open
+
+    try {
+      const res = await fetch(`/products/${handle}.js`);
+      const product = await res.json();
+
+      // Build color/variant options dynamically
+      const colorOptions = product.options.includes('Color')
+        ? product.variants
+            .map(v => `<button class="color-btn">${v.option1}</button>`)
+            .join('')
+        : '';
+
+      const sizeOptions = product.options.includes('Size')
+        ? product.options_with_values
+            .find(o => o.name === 'Size')
+            .values
+            .map(v => `<option value="${v}">${v}</option>`)
+            .join('')
+        : '';
+
+      popupContent.innerHTML = `
+        <img src="${product.images[0]}" alt="${product.title}" style="width:100px; height:auto; margin-bottom:8px;">
+        <strong>${product.title}</strong>
+        <p>${Shopify.formatMoney(product.price)}</p>
+        <p>${product.description.substring(0,100)}...</p>
+        <div class="colors">${colorOptions}</div>
+        <select class="sizes">
+          <option value="">Choose your size</option>
+          ${sizeOptions}
+        </select>
+        <button class="add-to-cart-btn" data-id="${product.variants[0].id}">ADD TO CART</button>
+      `;
+    } catch (err) {
+      console.error(err);
+      popupContent.innerHTML = `<span style="color:red;">Error loading product.</span>`;
+    }
+  });
+});
+
+  (function(){
+    const root = document.getElementById('gift-guide-grid-{{ section.id }}');
+    if(!root) return;
+
+    function closeAll(){
+      root.querySelectorAll('.gggrid__dot[aria-expanded="true"]').forEach(btn=>btn.setAttribute('aria-expanded','false'));
+    }
+
+    root.addEventListener('click', function(e){
+      const btn = e.target.closest('.gggrid__dot');
+      if(!btn){ closeAll(); return; }
+      const isOpen = btn.getAttribute('aria-expanded') === 'true';
+      closeAll();
+      btn.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+    });
+
+    document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeAll(); });
+  })();
+</script>
+
 {% schema %}
 {
-  "name": "Gift Guide Banner",
-  "tag": "section",
-  "class": "section gift-guide-banner-section",
+  "name": "Gift Guide Grid",
   "settings": [
-    {"type":"text","id":"topbar_text","label":"Topbar text","default":"Find the ideal gift for your loved ones"},
-    {"type":"text","id":"topbar_link_label","label":"Topbar link label","default":"Choose gift →"},
-    {"type":"url","id":"topbar_link_url","label":"Topbar link URL"},
-
-    {"type":"text","id":"kicker","label":"Kicker (small heading)","default":"TISSO VISON"},
-    {"type":"text","id":"title","label":"Main title","default":"The Gift Guide"},
-    {"type":"textarea","id":"subtitle","label":"Subtitle","default":"Discover Joy: Our Ultimate Holiday Gift Destination. Explore our curated collection and find the perfect gifts to delight your loved ones this holiday season."},
-
-    {"type":"text","id":"primary_label","label":"Primary button label","default":"Shop Now"},
-    {"type":"url","id":"primary_url","label":"Primary button URL"},
-
-    {"type":"text","id":"secondary_label","label":"Secondary button label","default":"Learn More"},
-    {"type":"url","id":"secondary_url","label":"Secondary button URL"},
-
-    {"type":"text","id":"bottom_note","label":"Bottom note","default":"SUSTAINABLE, ETHICALLY MADE GIFTS IN EVERY BUDGET"},
-
-    {"type":"image_picker","id":"bg_image","label":"Background illustration/image"},
-    {"type":"range","id":"bg_image_opacity","min":0,"max":100,"step":5,"unit":"%","label":"Background image opacity","default":100}
+    {"type":"header","content":"Images"},
+    {"type":"image_picker","id":"image_1","label":"Image 1"},
+    {"type":"text","id":"alt_1","label":"Alt text 1"},
+    {"type":"image_picker","id":"image_2","label":"Image 2"},
+    {"type":"text","id":"alt_2","label":"Alt text 2"},
+    {"type":"image_picker","id":"image_3","label":"Image 3"},
+    {"type":"text","id":"alt_3","label":"Alt text 3"},
+    {"type":"image_picker","id":"image_4","label":"Image 4"},
+    {"type":"text","id":"alt_4","label":"Alt text 4"},
+    {"type":"image_picker","id":"image_5","label":"Image 5"},
+    {"type":"text","id":"alt_5","label":"Alt text 5"},
+    {"type":"image_picker","id":"image_6","label":"Image 6"},
+    {"type":"text","id":"alt_6","label":"Alt text 6"},
+    {"type":"header","content":"Hotspots – per image (up to 3 each)"},
+    {"type":"checkbox","id":"h1_1_enable","label":"Enable hotspot 1 on Image 1","default":true},
+    {"type":"range","id":"h1_1_top","label":"Image 1 – Hotspot 1 – Top %","min":0,"max":100,"step":1,"unit":"%","default":70},
+    {"type":"range","id":"h1_1_left","label":"Image 1 – Hotspot 1 – Left %","min":0,"max":100,"step":1,"unit":"%","default":25},
+    {"type":"text","id":"h1_1_title","label":"Image 1 – Hotspot 1 – Title","default":"Featured product"},
+    {"type":"textarea","id":"h1_1_text","label":"Image 1 – Hotspot 1 – Text","default":"Short description about this item."},
+    {"type":"url","id":"h1_1_url","label":"Image 1 – Hotspot 1 – Link"},
+    {"type":"checkbox","id":"h1_2_enable","label":"Enable hotspot 2 on Image 1","default":false},
+    {"type":"range","id":"h1_2_top","label":"Image 1 – Hotspot 2 – Top %","min":0,"max":100,"step":1,"unit":"%","default":40},
+    {"type":"range","id":"h1_2_left","label":"Image 1 – Hotspot 2 – Left %","min":0,"max":100,"step":1,"unit":"%","default":60},
+    {"type":"text","id":"h1_2_title","label":"Image 1 – Hotspot 2 – Title"},
+    {"type":"textarea","id":"h1_2_text","label":"Image 1 – Hotspot 2 – Text"},
+    {"type":"url","id":"h1_2_url","label":"Image 1 – Hotspot 2 – Link"},
+    {"type":"checkbox","id":"h1_3_enable","label":"Enable hotspot 3 on Image 1","default":false},
+    {"type":"range","id":"h1_3_top","label":"Image 1 – Hotspot 3 – Top %","min":0,"max":100,"step":1,"unit":"%","default":20},
+    {"type":"range","id":"h1_3_left","label":"Image 1 – Hotspot 3 – Left %","min":0,"max":100,"step":1,"unit":"%","default":20},
+    {"type":"text","id":"h1_3_title","label":"Image 1 – Hotspot 3 – Title"},
+    {"type":"textarea","id":"h1_3_text","label":"Image 1 – Hotspot 3 – Text"},
+    {"type":"url","id":"h1_3_url","label":"Image 1 – Hotspot 3 – Link"}
+    /* Repeat similar hotspot settings for Images 2–6 */
   ],
   "presets": [
-    {"name":"Gift Guide Banner (Custom)", "category":"Custom"}
+    {"name":"Gift Guide Grid (Custom)", "category":"Custom"}
   ]
 }
 {% endschema %}
