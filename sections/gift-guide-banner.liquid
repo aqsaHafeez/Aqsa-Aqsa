@@ -150,6 +150,72 @@
 }
 
 </style>
+/* Responsive adjustments for gift guide grid */
+@media (max-width: 768px) {
+  .gggrid__wrap {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .gggrid__popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 350px;
+    z-index: 9999;
+  }
+
+  .gggrid__popup::after {
+    display: none; /* Hide arrow on mobile for a cleaner modal look */
+  }
+
+  .gggrid__dot {
+    width: 20px;
+    height: 20px;
+  }
+
+  .gggrid__popup img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .add-to-cart-btn {
+    font-size: 14px;
+    padding: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .gggrid__wrap {
+    grid-template-columns: 1fr;
+  }
+
+  .gggrid__popup {
+    padding: 12px;
+    width: 95%;
+  }
+
+  .gggrid__popup strong {
+    font-size: 16px;
+  }
+
+  .gggrid__popup p {
+    font-size: 14px;
+  }
+
+  .color-btn {
+    padding: 4px 6px;
+    font-size: 12px;
+  }
+
+  .add-to-cart-btn {
+    font-size: 13px;
+    padding: 8px;
+  }
+}
+
 
 {% schema %}
 {
