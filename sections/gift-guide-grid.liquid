@@ -17,35 +17,14 @@
   <div class="gggrid__item">
     {{ img | image_url: width: 1200 | image_tag: loading: 'lazy', class: 'gggrid__img', alt: section.settings[alt_key] }}
 
-    <button class="gggrid__dot" 
-        type="button" 
-        style="top: {{ section.settings.h1_1_top }}%; left: {{ section.settings.h1_1_left }}%" 
-        aria-haspopup="dialog" aria-label="Open info" aria-expanded="false">
-
-  <span class="gggrid__dot-core"></span>
-  <span class="gggrid__popup" role="dialog" aria-modal="false">
-    <img src="{{ section.settings.h1_1_product_image | image_url: width: 150 }}" alt="{{ section.settings.h1_1_title }}" class="gggrid__popup-img" />
-    <strong class="gggrid__popup-title">{{ section.settings.h1_1_title }}</strong>
-    <span class="gggrid__popup-price">{{ section.settings.h1_1_price }}</span>
-    <span class="gggrid__popup-text">{{ section.settings.h1_1_text }}</span>
-    <div class="gggrid__popup-options">
-      <div class="gggrid__popup-colors">
-        <button>Blue</button>
-        <button>Black</button>
-      </div>
-      <div class="gggrid__popup-sizes">
-        <select>
-          <option>Choose your size</option>
-          <option>S</option>
-          <option>M</option>
-          <option>L</option>
-        </select>
-      </div>
-    </div>
-    <a class="gggrid__popup-btn" href="{{ section.settings.h1_1_url }}">Add to Cart →</a>
-  </span>
-</button>
-
+    <button class="gggrid__dot" type="button" style="top: 70%; left: 25%" aria-haspopup="dialog" aria-label="Open info" aria-expanded="false">
+      <span class="gggrid__dot-core"></span>
+      <span class="gggrid__popup" role="dialog" aria-modal="false">
+        <strong class="gggrid__popup-title">Black Leather Bag</strong>
+        <span class="gggrid__popup-text">Short description about this item.</span>
+        <a class="gggrid__popup-link" href="/products/black-leather-bag">View product</a>
+      </span>
+    </button>
   </div>
 {% endfor %}
 
@@ -100,8 +79,6 @@
 {
   "name": "Gift Guide Grid",
   "settings": [
-    {"type":"image_picker","id":"h1_1_product_image","label":"Hotspot Product Image"},
-    {"type":"text","id":"h1_1_price","label":"Hotspot Product Price"},
     {"type":"header","content":"Images"},
     {"type":"image_picker","id":"image_1","label":"Image 1"},
     {"type":"text","id":"alt_1","label":"Alt text 1"},
