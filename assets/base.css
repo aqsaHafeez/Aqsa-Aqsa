@@ -3635,3 +3635,32 @@ details-disclosure > details {
     flex-direction: column;
     justify-content: flex-end;
 }
+.gggrid__popup {
+  position: absolute;
+  top: -12px; left: calc(100% + 10px);
+  transform: translateY(-100%);
+  width: 260px;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  box-shadow: 0 10px 24px rgba(0,0,0,.12);
+  border-radius: 8px;
+  padding: 16px;
+  display: none;
+  z-index: 5;
+  text-align: left;
+}
+.gggrid__popup-img {
+  width: 80px; height: auto; float: left; margin-right: 10px; border-radius: 4px;
+}
+.gggrid__popup-title { font-weight: bold; display: block; margin-bottom: 4px; }
+.gggrid__popup-price { display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px; }
+.gggrid__popup-text { font-size: 13px; color: #555; display: block; margin-bottom: 12px; }
+.gggrid__popup-options { margin-bottom: 12px; }
+.gggrid__popup-colors button { padding: 4px 8px; margin-right: 6px; border: 1px solid #ccc; }
+.gggrid__popup-sizes select { width: 100%; padding: 6px; }
+.gggrid__popup-btn {
+  display: block; width: 100%;
+  text-align: center; background: #000; color: #fff;
+  padding: 10px; text-decoration: none; font-weight: 600; border-radius: 4px;
+}
+.gggrid__dot[aria-expanded="true"] .gggrid__popup { display: block; }
