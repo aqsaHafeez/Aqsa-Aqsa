@@ -19,10 +19,10 @@
 
     <button class="gggrid__dot" type="button" style="top: 70%; left: 25%" aria-haspopup="dialog" aria-label="Open info" aria-expanded="false">
   <span class="gggrid__dot-plus">+</span>
-  <span class="gggrid__popup" role="dialog" aria-modal="false">
-    <strong class="gggrid__popup-title">Black Leather Bag</strong>
-    <span class="gggrid__popup-text">Short description about this item.</span>
-    <a class="gggrid__popup-link" href="/products/black-leather-bag">View product</a>
+ <span class="gggrid__popup" role="dialog" aria-modal="false">
+    <strong class="gggrid__popup-title"></strong>
+    <span class="gggrid__popup-text"></span>
+    <a class="gggrid__popup-link" href="#">View product</a>
   </span>
 </button>
   </div>
@@ -60,6 +60,28 @@
 </style>
 
 <script>
+  document.querySelectorAll('.gggrid__dot').forEach(button => {
+  button.addEventListener('click', async () => {
+    const handle = button.dataset.handle;
+    const popup = button.querySelector('.gggrid__popup');
+    const titleEl = popup.querySelector('.gggrid__popup-title');
+    const textEl = popup.querySelector('.gggrid__popup-text');
+    const linkEl = popup.querySelector('.gggrid__popup-link');
+
+    try {
+      const res = await fetch(`/products/${handle}.js`);
+      const product = await res.json();
+
+      titleEl.textContent = product.title;
+      textEl.innerHTML = product.body_html.replace(/<[^>]*>?/gm, '').slice(0, 100) + '...';
+      linkEl.href = product.url;
+
+      popup.style.display = 'block'; // Show popup
+    } catch (err) {
+      console.error('Failed to fetch product:', err);
+    }
+  });
+});
   (function(){
     const root = document.getElementById('gift-guide-grid-{{ section.id }}');
     if(!root) return;
